@@ -9,8 +9,9 @@ import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 import { createStructuredSelector } from 'reselect';
 import { SelectCartHidden } from '../../redux/cart/cart.selectors';
 import { selectCurrentUser } from '../../redux/user/user.selector';
+import { setCurrentUser } from '../../redux/user/user.actions';
 
-const Header = ({currentUser,hidden}) => (
+const Header = ({currentUser,hidden,dispatch}) => (
 
 <div className='header'>
 <Link to="/" className='logo-container'>
@@ -23,17 +24,19 @@ const Header = ({currentUser,hidden}) => (
 <Link className='option' to='/contact'>
     CONTACT
 </Link>
-{
-    currentUser?
-    <div className='option' onClick={
-        ()=>{
-            auth.signOut();
-        }
-    }>SIGN OUT</div>
-    :
-    <Link className='option' to='/signin'>SIGN IN</Link>
+{currentUser ? ( 
+         <div className='option' onClick={() => { auth.signOut()
+         
+         dispatch(setCurrentUser(null))
+         }}> 
+           SIGN OUT 
+         </div> 
+       ) : ( 
+         <Link className='option' to='/signin'> 
+           SIGN IN 
+         </Link> 
+       )} 
 
-}
 <CartIcon />
 </div>
 { !hidden ? <CartDropdown/> : ''}
